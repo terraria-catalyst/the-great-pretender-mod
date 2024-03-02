@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheGreatPretender", "TheGreatPretender\TheGreatPretender.csproj", "{75B0FFC1-ED4B-40E9-AFDC-F026CA13618B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiThat", "WikiThat\WikiThat.csproj", "{929672A3-137F-4FEE-B92C-7DEB5BC49BEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{75B0FFC1-ED4B-40E9-AFDC-F026CA13618B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B0FFC1-ED4B-40E9-AFDC-F026CA13618B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75B0FFC1-ED4B-40E9-AFDC-F026CA13618B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{929672A3-137F-4FEE-B92C-7DEB5BC49BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{929672A3-137F-4FEE-B92C-7DEB5BC49BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{929672A3-137F-4FEE-B92C-7DEB5BC49BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{929672A3-137F-4FEE-B92C-7DEB5BC49BEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,9 @@
+﻿[url=https://catalyst.tomat.dev]Website[/url]
+[url=https://www.patreon.com/TeamCatalyst]Patreon[/url]
+[url=https://discord.gg/vPTUZcvXjg]Discord[/url]
+
+[img]https://i.imgur.com/ki1CPZe.gif[/img]
+
+[h1]WikiThat - Wikithis Alternative/The Great Pretender Sample Mod[/h1]
+
+This is a simple mod that interfaces with The Great Pretender to automatically support any more that supports Wikithis.

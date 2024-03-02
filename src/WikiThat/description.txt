@@ -1,0 +1,1 @@
+This is a simple mod that interfaces with The Great Pretender to automatically support any more that supports Wikithis.
