@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
+using MonoMod.RuntimeDetour;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 
@@ -23,6 +24,57 @@ internal sealed class PretenderSystem : ModSystem {
     }
 
     private static readonly Dictionary<string, PretendMod> pretenders = new();
+
+    private Hook? getModHook;
+    private Hook? tryGetModHook;
+    private Hook? hasModHook;
+
+    public override void Load() {
+        base.Load();
+
+        getModHook = new Hook(
+            typeof(ModLoader).GetMethod("GetMod", new[] { typeof(string) })!,
+            GetMod
+        );
+
+        tryGetModHook = new Hook(
+            typeof(ModLoader).GetMethod("TryGetMod", new[] { typeof(string), typeof(Mod).MakeByRefType() })!,
+            TryGetMod
+        );
+
+        hasModHook = new Hook(
+            typeof(ModLoader).GetMethod("HasMod", new[] { typeof(string) })!,
+            HasMod
+        );
+    }
+
+    public override void Unload() {
+        base.Unload();
+
+        getModHook?.Dispose();
+        tryGetModHook?.Dispose();
+        hasModHook?.Dispose();
+    }
+
+    #region Hooks
+    private static Mod GetMod(Func<string, Mod> orig, string name) {
+        return pretenders.TryGetValue(name, out var mod) ? mod : orig(name);
+    }
+
+    private delegate bool TryGetModDelegate(string name, out Mod mod);
+
+    private static bool TryGetMod(TryGetModDelegate orig, string name, out Mod mod) {
+        if (!pretenders.TryGetValue(name, out var pretendMod))
+            return orig(name, out mod);
+
+        mod = pretendMod;
+        return true;
+    }
+
+    private static bool HasMod(Func<string, bool> orig, string name) {
+        return pretenders.ContainsKey(name) || orig(name);
+    }
+    #endregion
 
     public static bool IsPretend(string modName) {
         return pretenders.ContainsKey(modName);
