@@ -1,5 +1,5 @@
 displayName = The Great Pretender
 author = tomat (Team Catalyst)
-version = 1.0.0
+version = 1.0.1
 side = NoSync
 homepage = https://discord.gg/vPTUZcvXjg/
