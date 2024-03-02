@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using log4net;
 using MonoMod.RuntimeDetour;
 using Terraria.ModLoader;
@@ -9,6 +10,7 @@ using Terraria.ModLoader.Core;
 namespace TeamCatalyst.TheGreatPretender;
 
 internal sealed class PretenderSystem : ModSystem {
+    [ExtendsFromMod("")]
     private sealed class PretendMod : Mod {
         public override string Name { get; }
 
@@ -25,11 +27,11 @@ internal sealed class PretenderSystem : ModSystem {
 
     private static readonly Dictionary<string, PretendMod> pretenders = new();
 
-    private Hook? getModHook;
-    private Hook? tryGetModHook;
-    private Hook? hasModHook;
+    private static Hook? getModHook;
+    private static Hook? tryGetModHook;
+    private static Hook? hasModHook;
 
-    public override void Load() {
+    /*public override void Load() {
         base.Load();
 
         getModHook = new Hook(
@@ -46,14 +48,37 @@ internal sealed class PretenderSystem : ModSystem {
             typeof(ModLoader).GetMethod("HasMod", new[] { typeof(string) })!,
             HasMod
         );
+    }*/
+
+#pragma warning disable CA2255
+    [ModuleInitializer]
+    internal static void Init() {
+        getModHook = new Hook(
+            typeof(ModLoader).GetMethod("GetMod", new[] { typeof(string) })!,
+            GetMod
+        );
+
+        tryGetModHook = new Hook(
+            typeof(ModLoader).GetMethod("TryGetMod", new[] { typeof(string), typeof(Mod).MakeByRefType() })!,
+            TryGetMod
+        );
+
+        hasModHook = new Hook(
+            typeof(ModLoader).GetMethod("HasMod", new[] { typeof(string) })!,
+            HasMod
+        );
     }
+#pragma warning restore CA2255
 
     public override void Unload() {
         base.Unload();
 
         getModHook?.Dispose();
+        getModHook = null;
         tryGetModHook?.Dispose();
+        tryGetModHook = null;
         hasModHook?.Dispose();
+        hasModHook = null;
     }
 
     #region Hooks
@@ -80,26 +105,20 @@ internal sealed class PretenderSystem : ModSystem {
         return pretenders.ContainsKey(modName);
     }
 
-    public static void RegisterCallCallback(string modName, Func<object?[], object?>? callCallback) {
-        if (!pretenders.TryGetValue(modName, out var mod))
-            return;
+    public static void Register(string modName, Assembly? assembly, Func<object?[], object?>? callCallback, Version? version) {
+        var mod = GetOrCreatePretender(modName);
 
-        mod.CallCallback = callCallback;
+        mod.Code ??= assembly;
+        mod.CallCallback ??= callCallback;
+        mod.File.Version ??= version;
     }
 
-    public static void RegisterAssembly(string modName, Assembly assembly) {
-        if (!pretenders.TryGetValue(modName, out var mod))
-            return;
+    private static PretendMod GetOrCreatePretender(string modName) {
+        if (pretenders.TryGetValue(modName, out var mod))
+            return mod;
 
-        mod.Code = assembly;
-    }
-
-    private static void GetOrCreatePretender(string modName, out PretendMod mod) {
-        if (pretenders.TryGetValue(modName, out mod!))
-            return;
-
-        pretenders[modName] = new PretendMod(modName) {
-            // TODO: Create dummy TmodFile?
+        return pretenders[modName] = new PretendMod(modName) {
+            File = new TmodFile(""),
             Logger = LogManager.GetLogger("[PRETENDER] " + modName),
             Side = ModSide.NoSync,
             DisplayName = modName,

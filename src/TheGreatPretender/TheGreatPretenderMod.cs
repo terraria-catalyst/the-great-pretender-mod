@@ -25,19 +25,15 @@ namespace TeamCatalyst.TheGreatPretender {
                     return PretenderSystem.IsPretend(modName);
                 }
 
-                case "registercallcallback": {
-                    if (args.Length < 3 || args[1] is not string modName || args[2] is not Func<object?[], object?> callCallback)
+                case "register": {
+                    if (args.Length < 5 || args[1] is not string modName)
                         return false;
 
-                    PretenderSystem.RegisterCallCallback(modName, callCallback);
-                    return null;
-                }
+                    var assembly = args[2] as Assembly;
+                    var callCallback = args[3] as Func<object?[], object?>;
+                    var version = args[4] as Version;
 
-                case "registerassembly": {
-                    if (args.Length < 3 || args[1] is not string modName || args[2] is not Assembly assembly)
-                        return false;
-
-                    PretenderSystem.RegisterAssembly(modName, assembly);
+                    PretenderSystem.Register(modName, assembly, callCallback, version);
                     return null;
                 }
 

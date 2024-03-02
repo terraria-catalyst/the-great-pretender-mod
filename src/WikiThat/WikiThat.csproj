@@ -8,6 +8,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>enable</Nullable>
         <RootNamespace>TeamCatalyst.WikiThat</RootNamespace>
+
+        <AssemblyPublicizerPaths>$(AssemblyPublicizerPaths);$(MSBuildThisFileDirectory)wikithat.publicizer.js</AssemblyPublicizerPaths>
     </PropertyGroup>
 
 </Project>
