@@ -46,7 +46,7 @@ internal sealed class PretenderSystem : ModSystem {
         if (pretenders.TryGetValue(modName, out mod!))
             return;
 
-        mod = new PretendMod(modName) {
+        pretenders[modName] = new PretendMod(modName) {
             // TODO: Create dummy TmodFile?
             Logger = LogManager.GetLogger("[PRETENDER] " + modName),
             Side = ModSide.NoSync,
