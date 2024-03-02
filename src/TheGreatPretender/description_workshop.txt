@@ -1,0 +1,9 @@
+﻿[url=https://catalyst.tomat.dev]Website[/url]
+[url=https://www.patreon.com/TeamCatalyst]Patreon[/url]
+[url=https://discord.gg/vPTUZcvXjg]Discord[/url]
+
+[img]https://i.imgur.com/ki1CPZe.gif[/img]
+
+[h1]The Great Pretender[/h1]
+
+The Great Pretender provides an API for mods that want to replace APIs provided by other mods. It allows mods to register "pretend" mods which they intend to mimic, allowing them to hijack assembly references and Mod.Call invocations.
